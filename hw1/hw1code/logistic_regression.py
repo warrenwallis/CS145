@@ -58,7 +58,8 @@ def getBeta_BatchGradient(train_x, train_y, lr, num_iter, verbose):
         #========================#
         # STRART YOUR CODE HERE  #
         #========================#
-       
+        pass
+            
         #========================#
         #   END YOUR CODE HERE   #
         #========================# 

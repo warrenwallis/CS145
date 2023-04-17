@@ -57,7 +57,7 @@ def getBetaBatchGradient(train_x, train_y, lr, num_iter):
            #========================#
            # STRART YOUR CODE HERE  #
            #========================#
-           gradient = train_x[i] * ((train_x[i] * beta) - train_y[i])
+           gradient = gradient + np.dot(train_x[i], np.matmul(train_x[i], beta) - train_y[i])
            #========================#
            #   END YOUR CODE HERE   #
            #========================# 
@@ -83,7 +83,7 @@ def getBetaStochasticGradient(train_x, train_y, lr):
            #========================#
            # STRART YOUR CODE HERE  #
            #========================#
-           beta = beta + lr * ((train_y[i] - np.matmul(np.transpose(train_x[i]), beta)) * train_x)
+           beta = beta + lr * np.dot(train_y[idx] - np.matmul(train_x[idx], beta), train_x[idx])
            #========================#
            #   END YOUR CODE HERE   #
            #========================# 
