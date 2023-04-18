@@ -74,7 +74,7 @@ def getBetaStochasticGradient(train_x, train_y, lr):
     
     beta = np.random.rand(p)
     
-    epoch = 100;
+    epoch = 1000
     for iter in range(epoch):
         indices = list(range(n))
         rd.shuffle(indices)
