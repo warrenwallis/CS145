@@ -36,7 +36,8 @@ def compute_avglogL(X,y,beta):
     #========================#
     # STRART YOUR CODE HERE  #
     #========================#
-    
+    for i in range(n):
+        avglogL += np.dot(y[i] * X[i], beta) - np.log(1 + np.exp(np.dot(X[i], beta)))
     #========================#
     #   END YOUR CODE HERE   #
     #========================# 
@@ -58,7 +59,15 @@ def getBeta_BatchGradient(train_x, train_y, lr, num_iter, verbose):
         #========================#
         # STRART YOUR CODE HERE  #
         #========================#
+        d_beta = np.zeros(p)
+        n = train_x.shape[0]
         
+        # for j in range(p):
+        #     for i in range(n):
+        #         d_beta[j] += np.dot(train_x[i][j], train_y[i] - sigmoid(np.dot(beta, train_x[i])))
+        d_beta = np.matmul(np.transpose(train_x), (train_y - sigmoid(np.matmul(train_x, beta))))
+
+        beta = beta + lr * d_beta
             
         #========================#
         #   END YOUR CODE HERE   #
