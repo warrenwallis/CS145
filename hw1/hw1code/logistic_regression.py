@@ -38,6 +38,7 @@ def compute_avglogL(X,y,beta):
     #========================#
     for i in range(n):
         avglogL += np.dot(y[i] * X[i], beta) - np.log(1 + np.exp(np.dot(X[i], beta)))
+    avglogL /= -n
     #========================#
     #   END YOUR CODE HERE   #
     #========================# 
@@ -88,7 +89,10 @@ def getBeta_Newton(train_x, train_y, num_iter, verbose):
         #========================#
         # STRART YOUR CODE HERE  #
         #========================#
-       
+        first_der = np.matmul(np.transpose(train_x), (train_y - sigmoid(np.matmul(train_x, beta)))) # px1
+        diagonal = np.diag((sigmoid(np.matmul(train_x, beta)) * (1 - sigmoid(np.matmul(train_x, beta))))) # nxn
+        second_der = -np.matmul(np.matmul(np.transpose(train_x), diagonal), train_x) # pxp
+        beta = beta - np.matmul(np.linalg.inv(second_der), first_der) # px1
         #========================#
         #   END YOUR CODE HERE   #
         #========================# 
