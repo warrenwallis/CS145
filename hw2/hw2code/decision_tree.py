@@ -42,11 +42,25 @@ def compute_info_gain(data, att_name, y_name):
     # print(att_name)
     # print(vals, counts, total_counts)
     # print(compute_entropy(counts))
-    entropy = 0
-    for c in counts:
-        entropy += (c/total_counts)*compute_entropy(c/total_counts)
 
-    info_gain = entropy - cond_entr
+    d = data[[att_name, y_name]]
+
+    # calculating entropy
+    dp = d.drop(att_name, axis=1)
+    en_vals, en_counts = np.unique(dp, return_counts=True)
+    # print(en_vals, en_counts)
+    entropy = compute_entropy(en_counts)
+
+    # calculating conditional entropy
+    con_entropy = 0
+    for i,c in enumerate(counts):
+        dp = d.loc[d[att_name] == vals[i]].drop(att_name, axis=1)
+        cen_vals, cen_counts = np.unique(dp, return_counts=True)
+        #print(f'for category == {i}, {np.unique(dp, return_counts=True)}')
+        con_entropy += c/total_counts*compute_entropy(cen_counts)
+
+    info_gain = entropy - con_entropy
+
     #========================#
     #   END YOUR CODE HERE   #
     #========================# 
@@ -65,7 +79,7 @@ def comput_gain_ratio(data, att_name, y_name):
     #========================#
     # START YOUR CODE HERE  #
     #========================#
-
+    att_info = compute_entropy(counts)
     #========================#
     #   END YOUR CODE HERE   #
     #========================# 
