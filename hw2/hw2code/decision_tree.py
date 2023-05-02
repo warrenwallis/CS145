@@ -42,24 +42,32 @@ def compute_info_gain(data, att_name, y_name):
     # print(att_name)
     # print(vals, counts, total_counts)
     # print(compute_entropy(counts))
+    if False:
+        d = data[[att_name, y_name]]
 
-    d = data[[att_name, y_name]]
+        # calculating entropy
+        dp = d.drop(att_name, axis=1)
+        en_vals, en_counts = np.unique(dp, return_counts=True)
+        # print(en_vals, en_counts)
+        entropy = compute_entropy(en_counts)
 
-    # calculating entropy
-    dp = d.drop(att_name, axis=1)
-    en_vals, en_counts = np.unique(dp, return_counts=True)
-    # print(en_vals, en_counts)
-    entropy = compute_entropy(en_counts)
+        # calculating conditional entropy
+        con_entropy = 0
+        for i,c in enumerate(counts):
+            dp = d.loc[d[att_name] == vals[i]].drop(att_name, axis=1)
+            cen_vals, cen_counts = np.unique(dp, return_counts=True)
+            #print(f'for category == {i}, {np.unique(dp, return_counts=True)}')
+            con_entropy += (c/total_counts)*compute_entropy(cen_counts)
 
-    # calculating conditional entropy
-    con_entropy = 0
-    for i,c in enumerate(counts):
-        dp = d.loc[d[att_name] == vals[i]].drop(att_name, axis=1)
-        cen_vals, cen_counts = np.unique(dp, return_counts=True)
-        #print(f'for category == {i}, {np.unique(dp, return_counts=True)}')
-        con_entropy += c/total_counts*compute_entropy(cen_counts)
+        info_gain = entropy - con_entropy
 
-    info_gain = entropy - con_entropy
+    if True:
+        total_info = compute_entropy(data[y_name])
+        conditional_entropy = 0.0
+        for i in range(len(vals)):
+            conditional_entropy += counts[i]/total_counts * compute_entropy(data.loc[data[att_name] == vals[i]][y_name])
+
+        info_gain = total_info - conditional_entropy
 
     #========================#
     #   END YOUR CODE HERE   #
