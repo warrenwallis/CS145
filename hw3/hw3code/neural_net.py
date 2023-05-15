@@ -87,7 +87,9 @@ class TwoLayerNet(object):
         #   You may simply use np.maximun for implementing ReLU.
         # ================================================================ #
         ## hint: read the description above careful for how to name the variables
-
+        h1 = X@np.transpose(W1) + b1
+        a2 = np.maximum(h1, 0)
+        scores = a2@np.transpose(W2) + b2
         # ================================================================ #
         # END YOUR CODE HERE
         # ================================================================ #
@@ -113,7 +115,11 @@ class TwoLayerNet(object):
             # ================================================================ #
             # Hint: Check the type and shape of x and y.
             #       e.g. print('DEBUG:x.shap, y.shape', x.shape, y.shape)
-            
+
+            Y = np.zeros((y.size, y.max()+1))
+            Y[np.arange(y.size), y] = 1
+            loss = np.sum(np.square(x-Y)) / (2*N)
+            dx = (x-Y) / N
             # ================================================================ #
             # END YOUR CODE HERE
             # ================================================================ #
@@ -130,7 +136,7 @@ class TwoLayerNet(object):
         #   loss by 0.5 (in addition to the factor reg).
         #   do not regularize bias term
         # ================================================================ #
-        reg_loss = 0  # change this
+        reg_loss = 0.5 * reg * (np.sum(np.square(W1)) + np.sum(np.square(W2)))
 
         # ================================================================ #
         # END YOUR CODE HERE

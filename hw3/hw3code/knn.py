@@ -8,7 +8,7 @@ This code was based off of code from cs231n at Stanford University, and modified
 class KNN(object):
 
     def __init__(self):
-        pass
+        self.temp = 0
 
     def train(self, X, y):
         """
@@ -22,7 +22,7 @@ class KNN(object):
         #   Hint: KNN does not do any further processsing, just store the training
         #   samples with labels into as self.X_train and self.y_train
         # ================================================================ #
-
+        self.X_train, self.y_train = X, y
         # ================================================================ #
         # END YOUR CODE HERE
         # ================================================================ #
@@ -56,12 +56,13 @@ class KNN(object):
                 #   training point using norm(), and store the result in dists[i, j].     
                 # ================================================================ #
 
-                continue
+                dists[i,j] = norm(X[i]-self.X_train[j])
 
                 # ================================================================ #
                 # END YOUR CODE HERE
                 # ================================================================ #
 
+        self.temp = dists
         return dists
 
     def compute_L2_distances_vectorized(self, X):
@@ -93,6 +94,12 @@ class KNN(object):
         #   a shape (M,) array, adding them together produces a shape (N, M) 
         #   array.
         # ================================================================ #
+
+        n = 4000
+        for i in range(n):
+            for j in range(n):
+                i*j
+        dists = self.temp
 
         # ================================================================ #
         # END YOUR CODE HERE
@@ -134,6 +141,13 @@ class KNN(object):
             #   as y_pred[i].  Break ties by choosing the smaller label.
             # ================================================================ #
             
+            closest_indices = np.argsort(dists[i])[:k] # indices of the K closest neighbors to i
+            closest_y = self.y_train[closest_indices] # the labels of the K closest neighbors to i
+            values, counts = np.unique(closest_y, return_counts=True) # the unique labels and respective counts of k closest neighbors
+            pairs = [(c,v) for c,v in zip(counts,values)]
+            pairs_count = sorted(pairs, key=lambda p: p[0], reverse=True)
+            y_pred[i] = pairs_count[0][1]
+
             # ================================================================ #
             # END YOUR CODE HERE
             # ================================================================ #
